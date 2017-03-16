@@ -4,7 +4,7 @@ library(psych)
 master_pca <- master[, -53]
 master_pca <- data.frame(scale(master_pca))
 str(master_pca)
-cor.plot(master_pca)
+
 
 #PCA
 cms.pca <- princomp(~ ., data = master_pca, cor = TRUE)
@@ -28,16 +28,76 @@ cms.fa2$correlation
 str(effectiveness)
 eff <- effectiveness[, -c(1, 20)]
 str(eff)
+sum(is.na(eff))
 
 # observing correlations in the effectiveness measures
-pairs.panels(eff)
-# using fa from the psych package
-eff.fa <- fa(eff)
-eff.fa
+eff_cor <- lowerCor(eff)
+eff_cor <- as.data.frame(eff_cor)
+write.csv(eff_cor, "group_cor/eff_cor.csv")
 
+# Some of the correlated variables are CAC_3_score-IMM_2_score, OP_29-OP_30, STK_6, 
+# STK_8 etc. These should appear in the loading coefficeints as well. 
+
+# Using fa from the psych package to find the loadings
+eff.fa <- fa(eff, fm="ml", scores = "tenBerge")
+eff.fa$loadings
+eff.fa$scores
+sum(is.na(eff.fa$scores))
+
+# experience
 str(experience)
+exp <- experience[, -c(1, 13)]
+str(exp)
+
+# observing correlations in the effectiveness measures
+exp_cor <- lowerCor(exp)
+exp_cor <- as.data.frame(exp_cor)
+write.csv(exp_cor, "group_cor/exp_cor.csv")
+
+# Using fa to find the loadings
+exp.fa <- fa(exp, fm="ml", scores = "tenBerge")
+exp.fa$loadings
+exp.fa$scores
+sum(is.na(exp.fa$scores))
+
+
+# 
 str(medical)
+med <- medical[, -c(1, 7)]
+str(med)
+sum(is.na(med))
+
+# observing correlations in the effectiveness measures
+med_cor <- lowerCor(med)
+med_cor <- as.data.frame(med_cor)
+write.csv(med_cor, "group_cor/med_cor.csv")
+
+# Using fa to find the loadings
+med.fa <- fa(med, fm="ml", scores = "tenBerge")
+med.fa$loadings
+med.fa$scores
+sum(is.na(med.fa$scores))
+
+
+# mortality
 str(mortality)
+mor <- mortality[, -c(1, 9)]
+str(mor)
+sum(is.na(mor))
+
+# observing correlations in the effectiveness measures
+mor_cor <- lowerCor(mor)
+mor_cor <- as.data.frame(mor_cor)
+write.csv(mor_cor, "group_cor/mor_cor.csv")
+
+# Using fa to find the loadings
+mor.fa <- fa(mor, fm="ml", scores = "tenBerge")
+mor.fa$loadings
+mor.fa$scores
+sum(is.na(mor.fa$scores))
+
+
+#readmission
 str(readmission)
 str(safety)
 str(timely)
